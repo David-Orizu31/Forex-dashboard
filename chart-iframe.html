@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr"
+ class="is-not-authenticated is-not-pro is-not-trial ">
+<head>
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		var environment = 'battle';
+		window.WS_HOST_PING_REQUIRED = true;
+		window.BUILD_TIME = '2021_09_10-12_54';
+		window.WEBSOCKET_HOST = 'data.tradingview.com';
+		window.WEBSOCKET_PRO_HOST = 'prodata.tradingview.com';
+		window.TradingView = window.TradingView || {};
+
+	TradingView.onChartPage = true;
+	</script>
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		!function(){"use strict";var t,e,n,s;function o(t,e=!1){const{searchParams:n}=new URL(String(location)),s=function(t){const e=t+"=",n=document.cookie.split(";");for(let t=0;t<n.length;t++){let s=n[t];for(;" "===s.charAt(0);)s=s.substring(1,s.length);if(0===s.indexOf(e))return s.substring(e.length,s.length)}return null}("tv_app")||"";let o="true"===n.get("mobileapp_new"),i="true"===n.get("mobileapp");return e||(o||(o=["android","android_nps"].includes(s)),i||(i="ios"===s)),!("new"!==t&&"any"!==t||!o)||!("new"===t||!i)}!function(t){t[t.Text=1]="Text",t[t.Binary=2]="Binary"}(t||(t={})),function(t){t[t.DigitZero=48]="DigitZero",t[t.LatinSmallLetterM=109]="LatinSmallLetterM",t[t.Tilde=126]="Tilde"}(e||(e={})),function(t){t[t.SignatureLen=3]="SignatureLen"}(n||(n={})),function(t){t.BadLength="Invalid buffer length",t.BadSignature="Malformed ~m~ signature"}(s||(s={}));const i=()=>{},r="~m~";class c{constructor(t,e={}){this.sessionid=null,this.connected=!1,this._timeout=null,this._base=t,this._websocketType=t.options.websocketType,this._options={timeout:6e4,...e}}switchWebsocketMode(t){this._binFrame=new Uint8Array([126,109,126]),this._websocketType=t,this._socket.binaryType="arraybuffer"}connect(){this._socket=new WebSocket(this._prepareUrl()),this._socket.onmessage=t=>{this._onData(t.data)},this._socket.onclose=this._onClose.bind(this),this._socket.onerror=this._onError.bind(this)}send(e){this._socket&&this._socket.send(this._websocketType===t.Binary?this._binEncode(e):this._encode(e))}disconnect(){this._clearIdleTimeout(),this._socket&&(this._socket.onmessage=i,this._socket.onclose=i,this._socket.onerror=i,this._socket.close())}_clearIdleTimeout(){null!==this._timeout&&(clearTimeout(this._timeout),this._timeout=null)}_encode(t){let e,n="";const s=Array.isArray(t)?t:[t],o=s.length;for(let t=0;t<o;t++)e=null===s[t]||void 0===s[t]?"":c._stringify(s[t]),n+=r+e.length+r+e;return n}_binEncode(t){const e=Array.isArray(t)?t:[t],n=e.length;for(let t=0;t<n;t++)e[t]=null===e[t]||void 0===e[t]?"":e[t],e[t]="string"==typeof e[t]?c._str2ab(e[t]):e[t];let s=new Uint8Array(0);for(let t=0;t<n;t++){const n=this._binEncodeMessage(e[t]),o=new Uint8Array(s.length+n.length);o.set(s,0),o.set(n,s.byteLength),s=o}return s}_binEncodeMessage(t){const e=c._str2ab(t.byteLength.toString()),n=3+e.length+3+t.byteLength,s=new Uint8Array(n);let o=0;return s.set(this._binFrame,o),o+=this._binFrame.length,s.set(e,o),o+=e.length,s.set(this._binFrame,o),o+=this._binFrame.length,s.set(new Uint8Array(t),o),o+=t.length,s}_decode(t){const e=[];let n,s;do{if(t.substr(0,3)!==r)return e;n="",s="";const o=(t=t.substr(3)).length;for(let e=0;e<o;e++){if(s=Number(t.substr(e,1)),Number(t.substr(e,1))!==s){t=t.substr(n.length+r.length),n=Number(n);break}n+=s}e.push(t.substr(0,n)),t=t.substr(n)}while(""!==t);return e}_onData(o){let i;this._setTimeout(),this._websocketType===t.Binary?i=function(t){let o=0;const i=[],r=t.length;for(;o<r;){if(o+n.SignatureLen>r)throw new Error(s.BadLength);if(t[o]!==e.Tilde||t[o+1]!==e.LatinSmallLetterM||t[o+2]!==e.Tilde)throw new Error(s.BadSignature);o+=n.SignatureLen;let c=0;for(;o<r;o++){const n=t[o]-e.DigitZero;if(n<0||n>9)break;c=10*c+n}if(c+o+n.SignatureLen>r)throw new Error(s.BadLength);if(t[o]!==e.Tilde||t[o+1]!==e.LatinSmallLetterM||t[o+2]!==e.Tilde)throw new Error(s.BadSignature);o+=n.SignatureLen,i.push(t.subarray(o,o+c)),o+=c}return i}(new Uint8Array(o)):this._websocketType===t.Text&&(i=this._decode(o));const r=i.length;if(i&&i.length)for(let t=0;t<r;t++)this._onMessage(i[t])}_setTimeout(){this._clearIdleTimeout(),this._timeout=setTimeout(this._onTimeout.bind(this),this._options.timeout)}_onTimeout(){this.disconnect(),this._onDisconnect({code:4e3,reason:"socket.io timeout",wasClean:!1})}_onMessage(e){this.sessionid?this._checkIfHeartbeat(e)?this._onHeartbeat(this._websocketType===t.Binary?e.subarray(3):e.slice(3)):this._checkIfJson(e)?this._base.onMessage(JSON.parse(e.slice(3))):this._base.onMessage(e):(this.sessionid=e,this._onConnect())}_checkIfHeartbeat(t){return this._checkMessageType(t,"h")}_checkIfJson(t){return this._checkMessageType(t,"j")}_checkMessageType(e,n){if(this._websocketType===t.Binary){const t=n.charCodeAt(0);if(126===e[0]&&e[1]===t&&126===e[2])return!0}else if(this._websocketType===t.Text&&e.substr(0,3)==="~"+n+"~")return!0;return!1}_onHeartbeat(e){const n=this._websocketType===t.Binary?c._ab2str(e):e;this.send("~h~"+n)}_onConnect(){this.connected=!0,this._base.onConnect()}_onDisconnect(t){this._clear(),this._base.onDisconnect(t),this.sessionid=null}_clear(){this.connected=!1}_prepareUrl(){return`wss://${this._base.host}/socket.io/websocket`+(this.sessionid?"/"+this.sessionid:"")+"?from="+encodeURIComponent(window.location.pathname.slice(1,50))+"&date="+encodeURIComponent(window.BUILD_TIME||"")+(o("any")?"&client=mobile":"")}_onClose(t){this._clearIdleTimeout(),this._onDisconnect(t)}_onError(t){this._clearIdleTimeout(),this._clear(),this._base.emit("error",[t]),this.sessionid=null}static _stringify(t){return"[object Object]"===Object.prototype.toString.call(t)?"~j~"+JSON.stringify(t):String(t)}static _str2ab(t){const e=new Uint8Array(t.length);for(let n=0;n<t.length;n++)e[n]=t.charCodeAt(n);return e}static _ab2str(t){let e="";for(let n=0;n<=t.length-1;n++)e+=String.fromCharCode(t[n]);return e}}class h{constructor(t,e){this.host=t,this.options={connectTimeout:5e3,tryTransportsOnConnectTimeout:!0,...e},this._connecting=!1,this._events={},this.transport=this._getTransport()}isConnected(){return!!this.transport&&this.transport.connected}isConnecting(){return this._connecting}connect(){this.isConnected()||(this._connecting&&this.disconnect(),this._connecting=!0,this.transport.connect())}send(t){this.transport&&this.transport.connected&&this.transport.send(t)}disconnect(){this.transport&&this.transport.disconnect()}on(t,e){t in this._events||(this._events[t]=[]),this._events[t].push(e)}offAll(){this._events={}}onMessage(t){this.emit("message",[t])}emit(t,e=[]){if(t in this._events){const n=this._events[t].concat(),s=n.length;for(let t=0;t<s;t++)n[t].apply(this,e)}}onConnect(){this.clear(),this.emit("connect")}onDisconnect(t){this.emit("disconnect",[t])}clear(){this._connecting=!1}_getTransport(){return new c(this)}}var a,_;!function(t){t[t.Normal=300]="Normal",t[t.AfterCloseEvent=5e3]="AfterCloseEvent"}(a||(a={})),function(t){t[t.Info=0]="Info",t[t.Normal=1]="Normal",t[t.Debug=2]="Debug",t[t.Error=3]="Error"}(_||(_={}));const l=Number(window.TELEMETRY_WS_ERROR_LOGS_THRESHOLD)||0;var u;!function(t){t[t.PingInterval=1e4]="PingInterval",t[t.MaxPingsCount=10]="MaxPingsCount",t[t.MaxRedirects=20]="MaxRedirects",t[t.MaxReconnects=20]="MaxReconnects"}(u||(u={}));class g{constructor(t,e={}){this._queueStack=[],this._logsQueue=[],this._telemetryObjectsQueue=[],this._reconnectCount=0,this._redirectCount=0,this._errorsCount=0,this._errorsInfoSent=!1,this._connectionStart=null,this._connectionEstablished=null,this._reconnectTimeout=null,this._onlineCancellationToken=null,this._initialHost=e.initialHost||null,this._suggestedHost=t,this._proHost=e.proHost,this._reconnectHost=e.reconnectHost,this._doConnect(),e.pingRequired&&-1===window.location.search.indexOf("noping")&&this._startPing()}connect(){this._tryConnect()}resetCounters(){this._reconnectCount=0,this._redirectCount=0}setLogger(t,e){this._logger=t,this._getLogHistory=e,this._flushLogs()}setTelemetry(t){this._telemetry=t,this._telemetry.reportSent.subscribe(this,this._onTelemetrySent),this._flushTelemetry()}onReconnect(t){this._onReconnect=t}isConnected(){return!!this._socket&&this._socket.isConnected()}isConnecting(){return!!this._socket&&this._socket.isConnecting()}on(t,e){return!!this._socket&&("connect"===t&&this._socket.isConnected()?e():"disconnect"===t?this._disconnectCallbacks.push(e):this._socket.on(t,e),!0)}getSessionId(){return this._socket&&this._socket.transport?this._socket.transport.sessionid:null}send(t){return this.isConnected()?(this._socket.send(t),!0):(this._queueMessage(t),!1)}switchWebsocketMode(t){return!(!this._socket||!this._socket.transport)&&(this._socket.transport.switchWebsocketMode(t),!0)}getConnectionEstablished(){return this._connectionEstablished}getHost(){const t=this._tryGetProHost();return null!==t?t:this._reconnectHost&&this._reconnectCount>3?this._reconnectHost:this._suggestedHost}getReconnectCount(){return this._reconnectCount}getRedirectCount(){return this._redirectCount}getConnectionStart(){return this._connectionStart}disconnect(){this._clearReconnectTimeout(),(this.isConnected()||this.isConnecting())&&(this._propagateDisconnect(),this._disconnectCallbacks=[],this._closeSocket())}isMaxRedirects(){return this._redirectCount>=u.MaxRedirects}isMaxReconnects(){return this._reconnectCount>=u.MaxReconnects}getPingInfo(){return this._pingInfo||null}_tryGetProHost(){return window.TradingView&&window.TradingView.onChartPage&&"battle"===window.environment&&!this._redirectCount&&-1===window.location.href.indexOf("ws_host")?this._initialHost?this._initialHost:void 0!==window.user&&window.user.pro_plan?this._proHost||this._suggestedHost:null:null}_queueMessage(t){0===this._queueStack.length&&this._logMessage(_.Info,"Socket is not connected. Queued a message"),this._queueStack.push(t)}_processMessageQueue(){0!==this._queueStack.length&&(this._logMessage(_.Info,"Processing queued messages"),this._queueStack.forEach(this.send.bind(this)),this._logMessage(_.Info,"Processed "+this._queueStack.length+" messages"),this._queueStack=[])}_onDisconnect(t){null===this._reconnectTimeout&&(this._reconnectTimeout=setTimeout(this._tryReconnect.bind(this),a.AfterCloseEvent)),this._clearOnlineCancellationToken();let e="disconnect session:"+this.getSessionId();t&&(e+=", code:"+t.code+", reason:"+t.reason),this._logMessage(_.Info,e),this._propagateDisconnect(t),this._closeSocket(),this._queueStack=[]}_closeSocket(){null!==this._socket&&(this._socket.offAll(),this._socket.disconnect(),this._socket=null)}_logMessage(t,e){const n={method:t,message:e};this._logger?this._flushLogMessage(n):(n.message=`[${(new Date).toISOString()}] ${n.message}`,this._logsQueue.push(n))}_flushLogMessage(t){switch(t.method){case _.Debug:this._logger.logDebug(t.message);break;case _.Error:this._logger.logError(t.message);break;case _.Info:this._logger.logInfo(t.message);break;case _.Normal:this._logger.logNormal(t.message)}}_flushLogs(){this._flushLogMessage({method:_.Normal,message:"messages from queue. Start."}),this._logsQueue.forEach((t=>{this._flushLogMessage(t)})),this._flushLogMessage({method:_.Normal,message:"messages from queue. End."}),this._logsQueue=[]}_sendTelemetry(t,e){const n={event:t,params:e};this._telemetry?this._flushTelemetryObject(n):this._telemetryObjectsQueue.push(n)}_flushTelemetryObject(t){this._telemetry.sendChartReport(t.event,t.params,!1)}_flushTelemetry(){this._telemetryObjectsQueue.forEach((t=>{this._flushTelemetryObject(t)})),this._telemetryObjectsQueue=[]}_doConnect(){this._socket&&(this._socket.isConnected()||this._socket.isConnecting())||(this._clearOnlineCancellationToken(),this._host=this.getHost(),this._socket=new h(this._host,{websocketType:t.Text}),this._logMessage(_.Info,"Connecting to "+this._host),this._bindEvents(),this._disconnectCallbacks=[],this._connectionStart=performance.now(),this._connectionEstablished=null,this._socket.connect())}_propagateDisconnect(t){const e=this._disconnectCallbacks.length;for(let n=0;n<e;n++)this._disconnectCallbacks[n](t||{})}_bindEvents(){this._socket&&(this._socket.on("connect",(()=>{const t=this.getSessionId();if("string"==typeof t){const e=JSON.parse(t);if(e.redirect)return this._redirectCount+=1,this._suggestedHost=e.redirect,this.isMaxRedirects()&&this._sendTelemetry("redirect_bailout"),void this._redirect()}this._connectionEstablished=performance.now(),this._processMessageQueue(),this._logMessage(_.Info,"connect session:"+t)})),this._socket.on("disconnect",this._onDisconnect.bind(this)),this._socket.on("close",this._onDisconnect.bind(this)),this._socket.on("error",(t=>{this._logMessage(_.Info,new Date+" session:"+this.getSessionId()+" websocket error:"+JSON.stringify(t)),this._sendTelemetry("websocket_error"),this._errorsCount++,!this._errorsInfoSent&&this._errorsCount>=l&&(void 0!==this._lastConnectCallStack&&(this._sendTelemetry("websocket_error_connect_stack",{text:this._lastConnectCallStack}),delete this._lastConnectCallStack),void 0!==this._getLogHistory&&this._sendTelemetry("websocket_error_log",{text:this._getLogHistory(50).join("\n")}),this._errorsInfoSent=!0)})))}_redirect(){this.disconnect(),this._reconnectWhenOnline()}_tryReconnect(){this._tryConnect()&&(this._reconnectCount+=1)}_tryConnect(){return this._clearReconnectTimeout(),this._lastConnectCallStack=new Error(`WebSocket connect stack. Is connected: ${this.isConnected()}.`).stack||"",!this.isConnected()&&(this.disconnect(),this._reconnectWhenOnline(),!0)}_clearOnlineCancellationToken(){this._onlineCancellationToken&&(this._onlineCancellationToken(),this._onlineCancellationToken=null)}_clearReconnectTimeout(){null!==this._reconnectTimeout&&(clearTimeout(this._reconnectTimeout),this._reconnectTimeout=null)}_reconnectWhenOnline(){if(navigator.onLine)return this._logMessage(_.Info,"Network status: online - trying to connect"),this._doConnect(),void(this._onReconnect&&this._onReconnect());this._logMessage(_.Info,"Network status: offline - wait until online"),this._onlineCancellationToken=function(t){let e=t;const n=()=>{window.removeEventListener("online",n),e&&e()};return window.addEventListener("online",n),()=>{e=null}}((()=>{this._logMessage(_.Info,"Network status changed to online - trying to connect"),this._doConnect(),this._onReconnect&&this._onReconnect()}))}_onTelemetrySent(t){"websocket_error"in t&&(this._errorsCount=0,this._errorsInfoSent=!1)}_startPing(){if(this._pingIntervalId)return;const t=window.location.protocol+"//"+this.getHost()+"/ping";let e=0,n=0;const s=t=>{this._pingInfo=this._pingInfo||{max:0,min:1/0,avg:0};const s=(new Date).getTime()-t;s>this._pingInfo.max&&(this._pingInfo.max=s),s<this._pingInfo.min&&(this._pingInfo.min=s),e+=s,n++,this._pingInfo.avg=e/n,n>=u.MaxPingsCount&&this._pingIntervalId&&(clearInterval(this._pingIntervalId),delete this._pingIntervalId)};this._pingIntervalId=setInterval((()=>{const e=(new Date).getTime(),n=new XMLHttpRequest;n.open("GET",t,!0),n.send(),n.onreadystatechange=()=>{n.readyState===XMLHttpRequest.DONE&&200===n.status&&s(e)}}),u.PingInterval)}}window.WSBackendConnection=new g(window.WEBSOCKET_HOST,{pingRequired:window.WS_HOST_PING_REQUIRED,proHost:window.WEBSOCKET_PRO_HOST,reconnectHost:window.WEBSOCKET_HOST_FOR_RECONNECT,initialHost:window.WEBSOCKET_INITIAL_HOST}),window.WSBackendConnectionCtor=g}();
+	</script>
+
+	<meta charset="utf-8" />
+	<meta property="al:ios:app_store_id" content="1205990992" />
+	<meta property="al:ios:app_name" content="TradingView - trading community, charts and quotes" />
+
+
+
+	<title>Live stock, index, futures, Forex and Bitcoin charts on TradingView</title>
+
+		<meta name="description" content="Interactive financial charts for analysis and generating trading ideas on TradingView!" />
+
+
+
+
+<meta property="og:site_name" content="TradingView" /><meta property="og:type" content="website" /><meta property="og:title" content="Live stock, index, futures, Forex and Bitcoin charts on TradingView" /><meta property="og:description" content="Interactive financial charts for analysis and generating trading ideas on TradingView!" /><meta property="og:url" content="https://www.tradingview.com/chart/" /><meta property="og:image" content="https://www.tradingview.com/static/images/logo-preview.png" /><meta property="og:image:height" content="630" /><meta property="og:image:width" content="1200" /><meta property="og:image:secure_url" content="https://www.tradingview.com/static/images/logo-preview.png" />
+
+
+
+<meta name="twitter:site" content="@TradingView" /><meta name="twitter:card" content="summary" /><meta name="twitter:title" content="Live stock, index, futures, Forex and Bitcoin charts on TradingView" /><meta name="twitter:description" content="Interactive financial charts for analysis and generating trading ideas on TradingView!" /><meta name="twitter:url" content="https://www.tradingview.com/chart/" /><meta name="twitter:image" content="https://www.tradingview.com/static/images/logo-preview.png" /><meta http-equiv="X-UA-Compatible" content="IE=100" />
+
+<link
+	rel="link-locale"
+	data-locale="en"
+	href="https://www.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="in"
+	href="https://in.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="de_DE"
+	href="https://de.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="fr"
+	href="https://fr.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="es"
+	href="https://es.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="it"
+	href="https://it.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="pl"
+	href="https://pl.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="sv_SE"
+	href="https://se.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="tr"
+	href="https://tr.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="ru"
+	href="https://ru.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="br"
+	href="https://br.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="id"
+	href="https://id.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="ms_MY"
+	href="https://my.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="th_TH"
+	href="https://th.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="vi_VN"
+	href="https://vn.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="ja"
+	href="https://jp.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="kr"
+	href="https://kr.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="zh_CN"
+	href="https://cn.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="zh_TW"
+	href="https://tw.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="ar_AE"
+	href="https://ar.tradingview.com/chart/"
+><link
+	rel="link-locale"
+	data-locale="he_IL"
+	href="https://il.tradingview.com/chart/"
+>
+	<link rel="dns-prefetch" href="https://s3.amazonaws.com">
+
+<link rel="canonical" href="https://www.tradingview.com/chart/" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="currencies-config prefetch" as="fetch" href="https://s3.tradingview.com/convertible-currencies.json" crossorigin>
+<link rel="preconnect" href="https://pine-facade.tradingview.com/pine-facade" crossorigin>	<link rel="preconnect chart-storage" href="https://charts-storage.tradingview.com/charts-storage" crossorigin>
+
+
+
+
+	<meta name="ahrefs-site-verification" content="f729ff74def35be4b9b92072c0e995b40fcb9e1aece03fb174343a1b7a5350ce">
+
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"url": "https://www.tradingview.com",
+		"logo": "https://www.tradingview.com/static/images/logo-151x151.png",
+		"name" : "TradingView",
+		"sameAs" : ["https://www.facebook.com/tradingview/",
+					"https://twitter.com/tradingview/",
+					"https://www.youtube.com/channel/UCfOflihrkOKDQZ_ZKtF2VfQ/",
+					"https://www.linkedin.com/company/tradingview/"]
+	}
+</script>
+<link rel="icon" href="static/favicon(1).ico">
+<meta name="application-name" content="TradingView" />
+
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="manifest" href="static/manifest.json" />
+
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FD"> <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E222D"> 
+<meta name="apple-mobile-web-app-title" content="TradingView Site" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<link rel="apple-touch-icon" sizes="180x180" href="static/apple-touch-icon-180x180.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+	window.locale = 'en';
+	window.language = 'en';
+</script>
+<script src="static/en.71132cb3fa08b82f.js" charset="utf-8"></script>
+
+		<script type="text/javascript" src="static/runtime.8f3834a574c44c3a3ff8.js" ></script>
+		<script type="text/javascript" src="static/vendors.ee10c1b3328ab49372d0.js" ></script>
+
+	<script type="text/javascript" src="static/main_chart.514d546b2c02e60e795d.js" ></script>
+
+
+	
+	<link type="text/css" href="static/main_chart.2a92319e92df811c476a.css" rel="stylesheet"/>
+
+	<style type="text/css">
+		html, body {
+			min-width: 320px;
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		@media only screen and (max-width : 600px), only screen and (max-height: 440px) {
+			.charts-popup-list .item.save-load-chart-title { display: block; }
+		}
+	</style>
+
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		window.initData = window.initData || {};
+			!function(){"use strict";var e,t;!function(e){e.ThemeClassPrefix="theme-"}(e||(e={})),function(e){e.Light="light",e.Dark="dark"}(t||(t={}));const i="tradingview.current_theme.name";let o=window.localStorage.getItem(i);if(!o){const e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?t.Dark:t.Light;window.localStorage.setItem(i,e),o=e}!function(t,i=window){const o=e.ThemeClassPrefix+t,a=i.document.documentElement.classList;for(const t of Array.from(a))t.startsWith(e.ThemeClassPrefix)&&t!==o&&a.remove(t);a.add(o)}(o),window.initData.theme=o}();
+	</script>
+
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">// init data from server here
+		// it's gona be needed in main_chart entry point
+		var initData = window.initData || {};
+
+		initData.content = undefined;
+		initData.defSymbol = "";
+		initData.defInterval = "";
+		initData.name = "";
+		initData.description = "";
+		initData.uid = "";
+		initData.chart_id = "";
+		initData.tradingHost = "https://papertrading.tradingview.com/trading";
+		initData.sharing_enabled = {};
+		initData.can_create_streams = false;
+		initData.is_banned_from_ideas = false
+
+		initData.metaInfo = {
+			id: "",
+			name: "",
+			description: "",
+			uid: "",
+			username: "",
+			tags: "",
+			lastModified: "",
+		};
+
+		initData.readOnly = initData.chart_id === '' && initData.uid !== '';
+		initData.addonId = "";
+
+
+
+
+		window.SYMBOL_MAPPER_URL = 'https://symlist-trading.tradingview.com';
+		window.TRADING_REST_SERVER_URL = 'https://rest-demo.tradingview.com/tradingview/v1';</script>
+
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		var is_authenticated = false;
+		var user = {"username":"Guest","following":"0","followers":"0","ignore_list":[],"available_offers":{}};
+		window.initData.api_host = 'payflowlink.paypal.com';
+		window.initData.price_alerts_url = '//alerts.tradingview.com/alerts/';
+		window.initData.screener_alerts_base_url = '//scanner-alerts.tradingview.com/screener_alerts/';
+		window.initData.currentLocaleInfo = {"language":"en","language_name":"English","flag":"us","geoip_code":"us","priority":1000,"is_site_locale":true,"iso":"en","iso_639_3":"eng","show_on_widgets":true,"name_on_widgets":"English","global_name":"English","is_only_recommended_tw_autorepost":true};
+		window.initData.offerButtonInfo = {};
+		window.initData.settings = {'S3_LOGO_SERVICE_BASE_URL': 'https://s3-symbol-logo.tradingview.com/', 'WEBPACK_STATIC_PATH': '/static/bundles/'};
+
+
+			window.__initialEnabledFeaturesets =
+				(window.__initialEnabledFeaturesets || []).concat(
+					['tv_production'].concat(
+						window.ClientCustomConfiguration && window.ClientCustomConfiguration.getEnabledFeatureSet
+							? JSON.parse(window.ClientCustomConfiguration.getEnabledFeatureSet())
+							: []
+					)
+				);
+
+			if (window.ClientCustomConfiguration && window.ClientCustomConfiguration.getDisabledFeatureSet) {
+				window.__initialDisabledFeaturesets = JSON.parse(window.ClientCustomConfiguration.getDisabledFeatureSet());
+			}
+
+		window.WEBPACK_PUBLIC_PATH = '/static/bundles/';
+
+			var lastGlobalNotificationIds = [8089,8086,8083,8079,8048,8027,7986,7955,7911,7907,7902];
+
+		var shopConf = {
+			offers: [],
+		};
+
+		var featureToggleState = {"hide_top_authors_at_feed_ideas":1.0,"people_page_disabled":1.0,"top_badges_disabled":1.0,"show_live_streams_on_main_page":1.0,"il_locale_enabled":1.0,"chart_autosave_10min":1.0,"remove_line_tools_from_content":1.0,"migrate_unloaded_charts":1.0,"custom_tooltip_in_watch_list":1.0,"use_solid_line_style_for_traded_sources":1.0,"show_reverse_on_active_source_only":1.0,"new_align_trading_sources":0.05,"broker_ALOR":1.0,"broker_ALPACA":1.0,"broker_CURRENCYCOM":1.0,"broker_FOREXCOM":1.0,"broker_FXCM":1.0,"broker_FXCM_token_v2":1.0,"broker_GEMINI":1.0,"broker_HITBTC":1.0,"broker_IBROKER":1.0,"broker_OANDA":1.0,"broker_SAXOBANK":1.0,"broker_TICKMILL":1.0,"broker_TRADESTATION_V3":1.0,"broker_TRADOVATE":1.0,"broker_WHSELFINVEST":1.0,"broker_IRONBEAM":1.0,"broker_CAPITALCOM":1.0,"broker_TIGER":1.0,"broker_GLOBALPRIME":1.0,"broker_CHAKA":1.0,"broker_TIMEX":1.0,"broker_BINGBON":1.0,"new-broker-verifier":1.0,"alerts-send-extra-update":1.0,"hide_true_sms_alerts":1.0,"hide_alert_counter":1.0,"disable_idea_spam_filter":1.0,"timeout_django_db":0.15,"timeout_django_charts_db":0.25,"timeout_django_symbols_lists_db":0.25,"disable_services_monitor_metrics":1.0,"enable_signin_recaptcha":1.0,"enable_idea_spamdetectorml":1.0,"enable_idea_spamdetectorml_comments":1.0,"enable_idea_spam_checks_06_2021":1.0,"enable_inactive_users_cleanup":1.0,"evercookie_cancel_subscription":1.0,"financials_button":1.0,"google-ads":1.0,"google-one-tap-signin":1.0,"braintree-trial-implementation":1.0,"braintree-trial-in-order-dialog":1.0,"braintree-gopro-in-order-dialog":1.0,"braintree-apple-pay":1.0,"braintree-google-pay":1.0,"braintree-apple-pay-trial":1.0,"braintree-one-usd-verification":1.0,"lower_legend_collapser":1.0,"marked_symbols_enabled":1.0,"marketing-analytics":1.0,"marketing_email_checkbox":1.0,"marketing_features_gopro_cta":1.0,"modal_suspend":1.0,"news_separate_tab_enabled":1.0,"platform-ads-rotation":1.0,"prohibit_trial_for_duplicates":1.0,"review_popup_on_chart":1.0,"rude_ideas":1.0,"save_all_charts_in_layout":1.0,"ses_tracking":1.0,"show_offline_bar":1.0,"show_portfolio_button":1.0,"streams_widget_enabled":1.0,"streams_minimode_tooltip":1.0,"sphinx_top_by_categories_enabled":1.0,"streams_enabled":1.0,"streams_live_notifications":1.0,"tvcoins_donations":1.0,"tvcoins_comment_donations":1.0,"twilio_messaging_service":1.0,"unsubscribe_inactive_users":1.0,"vat_disabled":1.0,"youtube_repost":1.0,"youtube-restream":1.0,"daily_donations_limit":1.0,"video-ideas-new-api":1.0,"enable_non_unique_watch_sections":1.0,"enable_cyan_pink_watches":1.0,"enable_custom_lists_cross_tab_sync":1.0,"combine_add_and_move_symbols":1.0,"check_card_details_on_trial":1.0,"fail_on_duplicate_payment_methods_for_trial":1.0,"remove_wrap_text_legend":1.0,"disable_publish_strategy_range_based_chart":1.0,"hide_gopro_popup_upgrade_button":1.0,"broker_id_session":1.0,"show_strategy_margin_inputs":1.0,"desktop_version_notification_enabled":1.0,"snapshot_html_page":1.0,"screener_snowplow_enabled":1.0,"show_several_exchanges_for_stocks":1.0,"show_global_search_dialog":0.5,"restrict_simultaneous_requests":1.0,"popular_search_queries":1.0,"aggregating_page_pings":1.0,"remove_event_counters":1.0,"hide_historical_price_label":0.3};
+	</script>
+<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+	window.initData = window.initData || {};
+
+	window.initData.snowplowSettings = {
+		collectorId: 'tv_cf',
+		url: 'snowplow-pixel.tradingview.com',
+		params: {
+			appId: 'tradingview',
+		},
+		enabled: true,
+	}
+</script>
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		window.PUSHSTREAM_URL = 'wss://pushstream.tradingview.com';
+		window.TV_LIVE_MEDIA_SERVER_LIVE_URLS = {"NA":"tv-live-dstream-us.tradingview.com","EU":"tv-live-dstream-eu.tradingview.com"};
+		window.TV_LIVE_MEDIA_SERVER_DOMAIN = 'tv-dstream.tradingview.com';
+		window.TV_LIVE_DIRECTOR_DOMAIN = 'tv-dlive.tradingview.com';
+		window.TV_LIVE_MEDIA_URL = 'https://tv-recorder-storage-us.tradingview.com';
+		window.CHARTEVENTS_URL = 'https://chartevents-reuters.tradingview.com/';
+		window.EARNINGS_CALENDAR_URL = 'https://scanner.tradingview.com';
+		window.NEWS_SERVICE_URL = 'https://news-headlines.tradingview.com';
+		window.SS_HOST = 'symbol-search.tradingview.com';
+		window.SS_URL = '';
+		window.SS_DOMAIN_PARAMETER = 'production';
+		window.DEFAULT_SYMBOL = 'NASDAQ:AAPL';
+		window.COUNTRY_CODE_TO_DEFAULT_EXCHANGE = {"en":"US","us":"NASDAQ","ae":"DFM","ar":"BCBA","au":"ASX","be":"EURONEXTBRU","bh":"BAHRAIN","br":"BMFBOVESPA","ca":"TSX","ch":"SIX","cl":"BCS","zh_CN":"SSE","co":"BVC","de_DE":"FWB","dk":"OMXCOP","ee":"OMXTSE","eg":"EGX","es":"BME","fi":"OMXHEX","fr":"EURONEXT_PAR","hk":"HKEX","id":"IDX","il":"TASE","in":"BSE","is":"OMXICE","it":"MIL","ja":"TSE","kr":"KRX","lt":"OMXVSE","lv":"OMXRSE","lu":"LUXSE","mx":"BMV","ms_MY":"MYX","ng":"NSENG","nl":"EURONEXT_AMS","no":"OSL","nz":"NZX","pe":"BVL","pl":"GPW","pt":"EURONEXT_LIS","qa":"QSE","rs":"BELEX","ru":"MOEX","ar_AE":"TADAWUL","sv_SE":"NGM","sg":"SGX","th_TH":"SET","tr":"BIST","zh_TW":"TWSE","uk":"LSE","vi_VN":"HOSE","za":"JSE"};
+		window.HOTLISTS_URL = 'https://hotlist.tradingview.com/';
+		window.SCREENER_HOST = 'https://scanner.tradingview.com';
+		window.AWS_BBS3_DOMAIN = 'https://tradingview-user-uploads.s3.amazonaws.com';
+
+			window.DATA_ISSUES_HOST = 'https://support-middleware.tradingview.com';
+
+		window.TELEMETRY_HOSTS = {"charts":{"free":"https://telemetry.tradingview.com/free","pro":"https://telemetry.tradingview.com/pro","widget":"https://telemetry.tradingview.com/widget","ios_free":"https://telemetry.tradingview.com/charts-ios-free","ios_pro":"https://telemetry.tradingview.com/charts-ios-pro","android_free":"https://telemetry.tradingview.com/charts-android-free","android_pro":"https://telemetry.tradingview.com/charts-android-pro"},"alerts":{"all":"https://telemetry.tradingview.com/alerts"},"news":{"all":"https://telemetry.tradingview.com/news"},"pine":{"all":"https://telemetry.tradingview.com/pine"},"calendars":{"all":"https://telemetry.tradingview.com/calendars"},"site":{"free":"https://telemetry.tradingview.com/site-free","pro":"https://telemetry.tradingview.com/site-pro","widget":"https://telemetry.tradingview.com/site-widget"},"trading":{"all":"https://telemetry.tradingview.com/trading"}};
+		window.TELEMETRY_WS_ERROR_LOGS_THRESHOLD = '100';
+		window.RECAPTCHA_SITE_KEY = '6Lcqv24UAAAAAIvkElDvwPxD0R8scDnMpizaBcHQ';
+		window.RECAPTCHA_SITE_KEY_V3 = '6LeQMHgUAAAAAKCYctiBGWYrXN_tvrODSZ7i9dLA';
+		window.GOOGLE_CLIENT_ID = '236720109952-v7ud8uaov0nb49fk5qm03as8o7dmsb30.apps.googleusercontent.com';
+
+		window.PINE_URL = 'https://pine-facade.tradingview.com/pine-facade';
+	</script>
+</head>
+
+
+<body class="chart-page unselectable">
+
+
+ 
+
+	<div class="loading-indicator" id="loading-indicator"></div>
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		!function(){"use strict";!function(n,e){void 0===e&&(e={});var t=e.insertAt;if(n&&"undefined"!=typeof document){var i=document.head||document.getElementsByTagName("head")[0],r=document.createElement("style");r.type="text/css","top"===t&&i.firstChild?i.insertBefore(r,i.firstChild):i.appendChild(r),r.styleSheet?r.styleSheet.cssText=n:r.appendChild(document.createTextNode(n))}}("\n/* Thanks to google guys for the original <paper-spinner> =)\n * https://github.com/PolymerElements/paper-spinner */\n.tv-spinner {\n  display: none;\n  position: absolute;\n  width: 1em;\n  height: 1em;\n  top: calc(50% - 0.5em);\n  left: calc(50% - 0.5em);\n  margin: 0 auto;\n  color: #2962FF;\n  animation: tv-spinner__container-rotate 0.9s linear infinite;\n  will-change: transform;\n  /* The spinner does not have any contents that would have to be\n\t * flipped if the direction changes. Always use ltr so that the\n\t * style works out correctly in both cases. */\n  direction: ltr;\n}\n.tv-spinner--size_mini {\n  font-size: 16px;\n}\n.tv-spinner--size_medium {\n  font-size: 32px;\n}\n.tv-spinner--size_large {\n  font-size: 56px;\n}\n.tv-spinner--size_mini .tv-spinner__width_element:after {\n  border-width: 2px;\n}\n.tv-spinner--size_medium .tv-spinner__width_element:after {\n  border-width: 3px;\n}\n.tv-spinner--size_large .tv-spinner__width_element:after {\n  border-width: 4px;\n}\n.tv-spinner--shown {\n  display: block;\n}\n.tv-spinner__spinner-layer {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  white-space: nowrap;\n  color: currentColor;\n  transform: rotate(90deg);\n  /**\n\t\t * Patch the gap that appear between the two adjacent div.circle-clipper while the\n\t\t * spinner is rotating (appears on Chrome 50, Safari 9.1.1, and Edge).\n\t\t */\n}\n.tv-spinner__spinner-layer::after {\n  content: '';\n  position: absolute;\n  box-sizing: border-box;\n  top: 0;\n  border-width: 0.07em;\n  border-radius: 50%;\n  left: 45%;\n  width: 10%;\n  border-top-style: solid;\n}\n.tv-spinner__background {\n  display: inline-block;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n}\n.tv-spinner__background::after {\n  content: '';\n  position: absolute;\n  box-sizing: border-box;\n  top: 0;\n  left: 0;\n  border-radius: 50%;\n  bottom: 0;\n  width: 100%;\n  border-color: rgba(135, 151, 165, 0.2);\n  border-style: solid;\n}\n.tv-spinner__circle-clipper {\n  display: inline-block;\n  position: relative;\n  width: 50%;\n  height: 100%;\n  overflow: hidden;\n}\n.tv-spinner__circle-clipper::after {\n  content: '';\n  position: absolute;\n  box-sizing: border-box;\n  top: 0;\n  border-radius: 50%;\n  bottom: 0;\n  width: 200%;\n  border-style: solid;\n  border-bottom-color: transparent;\n  animation-duration: 1.4s;\n  animation-timing-function: cubic-bezier(0.36, 0, 0.37, 0.99);\n  animation-iteration-count: 1;\n  will-change: transform;\n}\n.tv-spinner__circle-clipper--left::after {\n  left: 0;\n  border-right-color: transparent;\n  transform: rotate(0deg);\n  animation-name: tv-spinner__left-spin;\n}\n.tv-spinner__circle-clipper--right::after {\n  left: -100%;\n  border-left-color: transparent;\n  transform: rotate(-124deg);\n  animation-name: tv-spinner__right-spin;\n}\n@keyframes tv-spinner__container-rotate {\n  100% {\n    transform: rotate(360deg);\n  }\n}\n@keyframes tv-spinner__left-spin {\n  0% {\n    transform: rotate(130deg);\n  }\n  to {\n    transform: rotate(0deg);\n  }\n}\n@keyframes tv-spinner__right-spin {\n  0% {\n    transform: rotate(-130deg);\n  }\n  to {\n    transform: rotate(-124deg);\n  }\n}\n");var n,e=new WeakMap;!function(n){n[n.Element=1]="Element",n[n.Document=9]="Document"}(n||(n={}));var t=function(t,i){var r,o=function(t,i){var r,o;return r=null==i?document.documentElement:i.nodeType===n.Document?i.documentElement:i,e&&(o=e.get(r)),o||((o=r.ownerDocument.createRange()).selectNodeContents(r),e&&e.set(r,o)),o.createContextualFragment(t)}(t,i);if("firstElementChild"in o)r=o.firstElementChild;else{r=null;for(var s=0;s<o.childNodes.length;s++){var a=o.childNodes[s];if(a.nodeType===n.Element){r=a;break}}}return null!==r&&o.removeChild(r),r}('\n\t\t<div class="tv-spinner" role="progressbar">\n\t\t\t<div class="tv-spinner__spinner-layer">\n\t\t\t\t<div class="tv-spinner__background tv-spinner__width_element"></div>\n\t\t\t\t<div class="tv-spinner__circle-clipper tv-spinner__width_element tv-spinner__circle-clipper--left"></div>\x3c!--\n\t\t\t\t--\x3e<div class="tv-spinner__circle-clipper tv-spinner__width_element tv-spinner__circle-clipper--right"></div>\n\t\t\t</div>\n\t\t</div>\n\t'),i=function(){function n(n){this._shown=!1,this._el=t.cloneNode(!0),this.setSize(n||"large")}return n.prototype.spin=function(n){return this._el.classList.add("tv-spinner--shown"),void 0===this._container&&(this._container=n,void 0!==n&&n.appendChild(this._el)),this._shown=!0,this},n.prototype.stop=function(n){return n&&void 0!==this._container&&this._container.removeChild(this._el),this._el.classList.remove("tv-spinner--shown"),this._shown=!1,this},n.prototype.setStyle=function(n){var e=this;return Object.keys(n).forEach((function(t){var i=n[t];void 0!==i&&e._el.style.setProperty(t,i)})),this},n.prototype.setSize=function(n){var e=void 0!==n?"tv-spinner--size_"+n:"";return this._el.className="tv-spinner "+e+" "+(this._shown?"tv-spinner--shown":""),this},n.prototype.getEl=function(){return this._el},n.prototype.destroy=function(){this.stop(),delete this._el,delete this._container},n}();window.Spinner=i}();
+
+	var loadingSpinner = new Spinner('large').setStyle({
+		zIndex: String(2e9),
+	});
+	loadingSpinner.getEl().classList.add('spinner');
+	loadingSpinner.spin(document.getElementById('loading-indicator'));
+	</script>
+
+
+
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">window.fbAppId = 155037361239837;</script>
+
+
+
+	<script nonce="zj/upuWMTvc5gHUC4c0PXg==">
+		window.BLOG_LOCALIZED_URL = 'https://www.tradingview.com/blog/en/';
+
+
+		initData.idc_exchanges_list = ["dfm","nzx","nzx_futures","bme","luxse","szse","hkex","hkex_futures","nag","tse","tfx","tocom","ose","sgx","sgx_stocks","sgx_futures","twse","bcba","bovespa_stocks","bovespa_futures","bvc","bmv","bvl","bcs","six","bahrain","belex","egx","nseng","idx","qse"]
+		initData.idc_delay_exchanges_list = ["nzx_futures","luxse","tfx","bvc","bahrain","belex"]
+		initData.block_widgetbar = function (WidgetBar, ContentPageResizer, RootResizer, configuration) {
+		};
+
+
+
+	</script>
+		<script type="application/prs.init-data+json">
+		{
+			"gaId": "UA-24278967-1",
+			"optimizeId": "GTM-TVZD48S",
+			"gaVars": {"app":"web"},
+			"gadwId": "AW-353039917",
+			"fbTagId": "1508275579478794",
+			"yaTagId": "69731728"		}
+	</script>
+	<script type="application/prs.init-data+json">
+	{
+		"streams_enabled": true,
+		"days_to_deactivation": null,
+		"is_support_available": false,
+		"canSwitchTheme": true	}
+	</script>
+
+	<meta name="tv:server-name" content="prod-frontend-web-b-1" />
+</body>
+</html>

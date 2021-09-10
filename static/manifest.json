@@ -1,0 +1,32 @@
+{
+	"name": "TradingView - Analyze Your Chart",
+	"short_name": "TradingView",
+	"icons": [
+		{
+			"src": "android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"density": 4
+		},
+		{
+			"src": "android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"prefer_related_applications": true,
+	"related_applications":	[
+		{
+			"platform": "play",
+			"id": "com.tradingview.tradingviewapp",
+			"url": "https://play.google.com/store/apps/details?id=com.tradingview.tradingviewapp&referrer=utm_source=TV_banner&utm_medium=banner&utm_campaign=banner"
+		},
+		{
+			"platform": "play",
+			"id": "com.tradingview.tradingviewapp.beta.production"
+		}
+	],
+	"theme_color": "#262b3e",
+	"background_color": "#262b3e",
+	"display": "standalone"
+}
