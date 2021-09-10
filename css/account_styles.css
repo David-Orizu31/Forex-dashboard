@@ -1,0 +1,30 @@
+.account-header {
+    color: black;
+    margin: 20px;
+    font-size: 25px;
+    font-weight: 500px;
+}
+
+.form-group {
+    margin: 15px 40px 15px 40px;
+}
+
+.form-control {
+    width: 100%;
+    font-size: 17px !important;
+    padding: 10px !important;
+    color: #4e4e4e;
+    background-color: #f3f3f3;
+    border: 1px solid transparent !important;
+}
+
+.form-label {
+    font-size: 16px;
+    color: #4e4e4e;
+    margin-bottom: 10px !important;
+}
+
+input[type=email], input[type=password], input[type=search], input[type=text], select, textarea {
+
+    background: #f3f3f3 !important;
+}
